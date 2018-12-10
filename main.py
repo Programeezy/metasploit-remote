@@ -1,4 +1,5 @@
 import json
+import os
 from collections import namedtuple
 
 from ansible.executor.task_queue_manager import TaskQueueManager
@@ -8,6 +9,8 @@ from ansible.playbook.play import Play
 from ansible.plugins.callback import CallbackBase
 from ansible.vars.manager import VariableManager
 
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class ResultCallback(CallbackBase):
     """A sample callback plugin used for performing an action as results come in
@@ -60,7 +63,7 @@ def main():
     results_callback = ResultCallback()
 
     # create inventory, use path to host config file as source or hosts in a comma separated string
-    inventory = InventoryManager(loader=loader, sources='18.194.205.225,')
+    inventory = InventoryManager(loader=loader, sources='18.196.195.85,')
 
     variable_manager = VariableManager(loader=loader, inventory=inventory)
 
@@ -68,7 +71,7 @@ def main():
 
     play_source = dict(
         name="Ansible Play",
-        hosts='18.194.205.225',
+        hosts='18.196.195.85',
         gather_facts='no',
         tasks=[
             dict(action=dict(module='shell', args='ls'), register='shell_out'),
@@ -102,7 +105,9 @@ def main():
                 'docker-ce',
                 'python3-pip'
             ])),
-            dict(action=dict(module='pip', args=dict(name='docker')))
+            dict(action=dict(module='pip', args=dict(name='docker'))),
+            dict(action=dict(module='pip', args=dict(name='docker-compose'))),
+            dict(action=dict(module='synchronize', args=dict(src=os.path.join(BASE_DIR, 'docker'), dest='/msf_deploy')))
         ]
     )
 

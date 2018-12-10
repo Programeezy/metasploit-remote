@@ -1,0 +1,3 @@
+<ruby>
+run_single("setg DATABASE_URL postgres://msf:Id30IFquo31rRWnZSGQHz9YZrtNly2ZUPgoX2GC/fBQ=@localhost") if ENV['DATABASE_URL']
+</ruby>
